@@ -6,13 +6,12 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Description: React TodoMVC with a Serverless backend
-      Handler: src/index.handler
-      Runtime: nodejs6.10
-      CodeUri: build/todo.zip
+      Handler: index.handler
+      Runtime: nodejs10.x
+      CodeUri: src/siteFunction
       Policies:
         - DynamoDBCrudPolicy:
-            TableName:
-              Ref: todoTable
+            TableName: !Ref todoTable
       Timeout: 10
       Events:
         root:
@@ -23,16 +22,15 @@ Resources:
         getProxy:
           Type: Api
           Properties:
-            Path: '/{proxy+}'
+            Path: /{proxy+}
             Method: get
         postProxy:
           Type: Api
           Properties:
-            Path: '/{proxy+}'
+            Path: /{proxy+}
             Method: post
       Environment:
         Variables:
-          TABLE:
-            Ref: todoTable
+          TABLE: !Ref todoTable
   todoTable:
     Type: AWS::Serverless::SimpleTable
